@@ -13,7 +13,11 @@ import com.squareup.picasso.Picasso;
  * Created by marcel on 10/3/15.
  */
 public class AnswerParser {
-    public JSONObject convertStringToJSON(String answer) {
+    public Apartment parse(String answer) {
+        JSONObject jsonObject = convertStringToJSON(answer);
+        return parseJSON(jsonObject);
+    }
+    private JSONObject convertStringToJSON(String answer) {
         try {
             return new JSONObject(answer);
         } catch (JSONException e) {
@@ -21,7 +25,7 @@ public class AnswerParser {
         }
         return null;
     }
-    public Apartment parseJSON(JSONObject jsonObject) {
+    private Apartment parseJSON(JSONObject jsonObject) {
         jsonObject.length();
 
 //        MaterialLargeImageCard.DrawableExternal drawable = new MaterialLargeImageCard.DrawableExternal() {

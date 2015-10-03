@@ -31,7 +31,6 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     static final int MIN_DISTANCE = 300;
     private final String URL = "http://homer-data.azurewebsites.net/";
     private InputValues inputValues= new InputValues();
-    private CachedResponse cachedResponse = new CachedResponse();
 
     public boolean loopFlag = true;
 
@@ -43,17 +42,18 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_swipe);
-        Log.d("Test","Testmsg");
 
+        Intent iin = getIntent();
+        Bundle b = iin.getExtras();
+        if (b != null) {
+            inputValues.desirialise((String) b.get("InputValues"));
+        }
 
-            Intent iin = getIntent();
-            Bundle b = iin.getExtras();
-            if (b != null) {
-                inputValues.desirialise((String) b.get("InputValues"));
-            }
-
-            sendInitToServer();
-        while (loopFlag){}
+        sendInitToServer();
+//        while (loopFlag){
+//
+//        }
+//        buildCards(CachedResponse.getInstance().getApartment(0,0));
 
 
 /*
@@ -72,14 +72,14 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 
     private void sendInitToServer() {
         String ad = inputValues.getLocation().getAddress() + "+" +inputValues.getLocation().getCity();
-        ad.replaceAll(" ", "+");
+        ad = ad.replaceAll(" ", "+");
         String ml;
         switch (inputValues.getMoneyLevel()) {
             case 1:
                 ml = "low";
                 break;
             case 2:
-                ml = "mid";
+                ml = "med";
                 break;
             case 3:
                 ml = "high";
@@ -88,6 +88,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 ml = "";
                 break;
         }
+        Log.i(TAG, "Send init request");
         new RequestTask(this).execute(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
 
     }
@@ -108,8 +109,8 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
             default:
                 break;
         }
-        Log.i(TAG, "Send request " + str);
-        new RequestTask(this).execute(URL + str + "?sessionid=" + cachedResponse.getSessionid());
+        Log.i(TAG, "Send swipe request " + str);
+        new RequestTask(this).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
     }
 
     @Override
