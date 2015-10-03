@@ -4,6 +4,17 @@ package com.example.christoph.homer;
  * Created by Christoph on 03.10.2015.
  */
 public class CachedResponse {
+    private static CachedResponse instance = null;
+
+    protected CachedResponse() {
+        // Exists only to defeat instantiation.
+    }
+    public static CachedResponse getInstance() {
+        if(instance == null) {
+            instance = new CachedResponse();
+        }
+        return instance;
+    }
 
     private String sessionid = "";
     private final int nrOfCacheStages = 2;
@@ -11,7 +22,7 @@ public class CachedResponse {
     //Achsen der Flats:
     //1. Achse, Current, Current.another, Current.cheaper, Current.closer
     //flats[1][2][x]= flasts[0][1][2] ?
-    private Apartment[][][] flats = new Apartment[4][4][4];
+    private Apartment[][] apartments = new Apartment[3][4];
 
 
     public String getSessionid() {
@@ -20,5 +31,9 @@ public class CachedResponse {
 
     public void setSessionid(String sessionid) {
         this.sessionid = sessionid;
+    }
+
+    public Apartment getApartment(int depth, int index) {
+        return apartments[depth][index];
     }
 }

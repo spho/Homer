@@ -6,9 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -104,6 +108,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
             default:
                 break;
         }
+        Log.i(TAG, "Send request " + str);
         new RequestTask(this).execute(URL + str + "?sessionid=" + cachedResponse.getSessionid());
     }
 
@@ -112,25 +117,28 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.cards_linear);
 
         linearLayout.removeAllViews();
-        buildCards(apartementArray.get(counter));
-        counter++;
-        if (counter == 4) {
-            counter = 0;
-        }
+
+//        counter++;
+//        if (counter == 4) {
+//            counter = 0;
+//        }
 
         Log.i("CARDID: ", card.getId());
 
         if(card.getId()=="cardid_picture"){
+            buildCards(CachedResponse.getInstance().getApartment(0,0));
             sendSwipeRequest(1);
         }else if(card.getId()=="cardid_price"){
+            buildCards(CachedResponse.getInstance().getApartment(0,1));
             sendSwipeRequest(2);
         }else if(card.getId()=="cardid_time"){
+            buildCards(CachedResponse.getInstance().getApartment(0,2));
             sendSwipeRequest(3);
         }
 
     }
 
-    public void buildCards(Apartment apartment) {
+    public void buildCards(final Apartment apartment) {
         //Create a Card, set the title over the image and set the thumbnail
         setContentView(R.layout.activity_swipe);
 
@@ -179,7 +187,17 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                         .setTitle(apartment.getTitle())
                         .setSubTitle(apartment.getAddress())
                                 // TODO replace this
-                        .useDrawableId(apartment.getImage())
+                        .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
+                            @Override
+                            public void setupInnerViewElements(ViewGroup parent, View viewImage) {
+
+                                Picasso.with(getActivity()).setIndicatorsEnabled(true);  //only for debug tests
+                                Picasso.with(getActivity())
+                                        .load(apartment.getImage())
+                                        .error(R.drawable.ic_error_black_48dp)
+                                        .into((ImageView) viewImage);
+                            }
+                        })
                                 //      .setupSupplementalActions(R.layout.picture_card, actions)
                         .build();
         largecardPicture.setId("cardid_picture");

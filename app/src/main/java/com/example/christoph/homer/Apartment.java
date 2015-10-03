@@ -11,10 +11,11 @@ public class Apartment {
     private String comment;
     private String image;
     private String address;
+    private float rooms;
     private int sequenceId;
 
 
-    public Apartment(int id, int price, int traveltime, String title, String comment, String image, String address, int sequenceId) {
+    public Apartment(int id, int price, int traveltime, String title, String comment, String image, String address, float rooms, int sequenceId) {
         this.id = id;
         this.price = price;
         this.traveltime = traveltime;
@@ -22,6 +23,7 @@ public class Apartment {
         this.comment = comment;
         this.image = image;
         this.address = address;
+        this.rooms = rooms;
         this.sequenceId= sequenceId;
     }
 
@@ -39,6 +41,14 @@ public class Apartment {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public float getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(float rooms) {
+        this.rooms = rooms;
     }
 
     public int getId() {

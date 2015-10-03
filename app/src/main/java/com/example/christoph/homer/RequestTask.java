@@ -3,6 +3,8 @@ package com.example.christoph.homer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import android.os.AsyncTask;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -70,8 +72,8 @@ class RequestTask extends AsyncTask<String, String, String>{
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-       System.out.println("Replay arrived");
-        System.out.println(result);
+        Log.i("RequestTask:", "Replay arrived");
+        Log.i("RequestTask:", result);
         swipeActivity.loopFlag=false;
     }
 }
