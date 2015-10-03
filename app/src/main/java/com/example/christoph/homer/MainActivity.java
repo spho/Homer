@@ -180,8 +180,6 @@ public class MainActivity extends Activity {
 
     private void exitFormAndGoToSwiping() {
 
-
-
         /*
         String str = input.serialise();
         InputValues in2 = new InputValues();
