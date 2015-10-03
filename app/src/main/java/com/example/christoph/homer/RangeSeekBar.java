@@ -419,7 +419,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      *            The canvas to draw upon.
      */
     private void drawThumb(float screenCoord, boolean pressed, Canvas canvas) {
-        canvas.drawBitmap(pressed ? thumbPressedImage : thumbImage, screenCoord - thumbHalfWidth, (float) ((0.5f * getHeight()) - thumbHalfHeight), paint);
+        canvas.drawBitmap(pressed ? thumbPressedImage : thumbImage, screenCoord - thumbHalfWidth, (float) (((0.5f * getHeight()) - thumbHalfHeight)), paint);
     }
 
     /**

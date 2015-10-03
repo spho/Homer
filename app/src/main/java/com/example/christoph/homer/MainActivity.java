@@ -61,7 +61,12 @@ public class MainActivity extends Activity {
 
 
             location = new Location(address, city, state, country, postalCode, knownName);
-            editText.setText(address + ", " + city);
+            if(address!=city) {
+                editText.setText(address + ", " + city);
+            }
+            else{
+                editText.setText(address);
+            }
 
 
         }
