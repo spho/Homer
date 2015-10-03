@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
  * Created by marcel on 10/3/15.
  */
 public class AnswerParser {
-    public Apartment parse(String answer) {
+    public Apartment[][] parse(String answer) {
         JSONObject jsonObject = convertStringToJSON(answer);
         return parseJSON(jsonObject);
     }
@@ -25,9 +25,9 @@ public class AnswerParser {
         }
         return null;
     }
-    private Apartment parseJSON(JSONObject jsonObject) {
+    private Apartment[][] parseJSON(JSONObject jsonObject) {
         jsonObject.length();
-
+        Apartment[][] apartments = new Apartment[4][4];
 //        MaterialLargeImageCard.DrawableExternal drawable = new MaterialLargeImageCard.DrawableExternal() {
 //            @Override
 //            public void setupInnerViewElements(ViewGroup parent, View viewImage) {
@@ -38,22 +38,52 @@ public class AnswerParser {
 //                        .into((ImageView) viewImage);
 //            }
 //        }
-        int id = 0, price = 0, traveltime = 0;
-        String img = null, address = null, title = null;
-        float rooms = 0.0f;
-
         try {
-            id = jsonObject.getInt("id");
-            price = jsonObject.getInt("price");
-            traveltime = jsonObject.getInt("traveltime");
-            img = jsonObject.getString("img");
-            address = jsonObject.getString("address");
-            title = jsonObject.getString("title");
-            rooms = (float)jsonObject.getDouble("rooms");
+
+            for (int i = 0; i < 4; i++) {
+                JSONObject root = null;
+                switch (i) {
+                    case 0:
+                        root = jsonObject.getJSONObject("current");
+                        break;
+                    case 1:
+                        root = jsonObject.getJSONObject("another");
+                        break;
+                    case 2:
+                        root = jsonObject.getJSONObject("cheaper");
+                        break;
+                    case 3:
+                        root = jsonObject.getJSONObject("closer");
+                        break;
+                }
+                if(root == null) {
+                    throw new JSONException("Fail");
+                }
+                apartments[i][0] = parseApartment(root);
+                if(i!=0) {
+                    JSONObject another = root.getJSONObject("another");
+                    apartments[i][1] = parseApartment(another);
+                    JSONObject cheaper = root.getJSONObject("cheaper");
+                    apartments[i][2] = parseApartment(cheaper);
+                    JSONObject closer = root.getJSONObject("closer");
+                    apartments[i][3] = parseApartment(closer);
+                }
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Apartment result = new Apartment(id, price, traveltime, title, "", img, address, rooms, 0);
-        return result;
+
+        return apartments;
+    }
+    private Apartment parseApartment(JSONObject jsonObject) throws JSONException {
+        int id = jsonObject.getInt("id");
+        int price = jsonObject.getInt("price");
+        int traveltime = jsonObject.getInt("traveltime");
+        String img = jsonObject.getString("img");
+        String address = jsonObject.getString("address");
+        String title = jsonObject.getString("title");
+        Float rooms = (float) jsonObject.getDouble("rooms");
+        return new Apartment(id, price, traveltime, title, "", img, address, rooms, 0);
     }
 }

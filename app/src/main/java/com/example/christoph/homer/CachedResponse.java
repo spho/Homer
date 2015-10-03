@@ -23,7 +23,7 @@ public class CachedResponse {
     //Achsen der Flats:
     //1. Achse, Current, Current.another, Current.cheaper, Current.closer
     //flats[1][2][x]= flasts[0][1][2] ?
-    private Apartment[][] apartments = new Apartment[3][4];
+    private Apartment[][] apartments = new Apartment[4][4];
 
 
     public String getSessionid() {
@@ -36,5 +36,9 @@ public class CachedResponse {
 
     public Apartment getApartment(int depth, int index) {
         return apartments[depth][index];
+    }
+
+    public void setApartments(Apartment[][] apartments) {
+        this.apartments = apartments;
     }
 }
