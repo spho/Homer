@@ -30,43 +30,19 @@ public class MainActivity extends Activity {
     private int lowBoundary = 1;
     private int highBoundary = 8;
 
+
+    private boolean debug = true;
+
     private boolean selectiondone = false;
-
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            if(savedInstanceState!=null)
-            choosenMoneyRange = savedInstanceState.getInt("STATE_MONEY");
-            lowBoundary = savedInstanceState.getInt("LOW_BOUND");
-            highBoundary = savedInstanceState.getInt("HIGH_BOUND");
-            switch(choosenMoneyRange){
-                case 1:buttons[0].setPressed(true);
-                    buttons[1].setPressed(false);
-                    buttons[2].setPressed(false);
-                    break;
-                case 2:buttons[0].setPressed(false);
-                    buttons[1].setPressed(true);
-                    buttons[2].setPressed(false);
-                    break;
-                case 3:buttons[0].setPressed(false);
-                    buttons[1].setPressed(false);
-                    buttons[2].setPressed(true);
-                    break;
-                default:
-                    break;
-            }
-
-        }catch (Exception e){
-
-        }
-
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_main);
-
-
 
 
         initUI();
@@ -82,9 +58,36 @@ public class MainActivity extends Activity {
             String postalCode = (String) b.get("postal");
             String knownName = (String) b.get("knownname");
 
+
+
             location = new Location(address, city, state, country, postalCode, knownName);
-            selectiondone=true;
-            editText.setText(address+", "+city);
+            editText.setText(address + ", " + city);
+
+
+        }
+
+
+
+        switch (choosenMoneyRange) {
+            case 1:
+                buttons[0].setPressed(true);
+                buttons[1].setPressed(false);
+                buttons[2].setPressed(false);
+                break;
+            case 2:
+                buttons[0].setPressed(false);
+                buttons[1].setPressed(true);
+                buttons[2].setPressed(false);
+                break;
+            case 3:
+                buttons[0].setPressed(false);
+                buttons[1].setPressed(false);
+                buttons[2].setPressed(true);
+                break;
+            default:
+                break;
+
+
         }
 
 
@@ -96,15 +99,14 @@ public class MainActivity extends Activity {
         buttons[1] = (Button) findViewById(R.id.button2);
         buttons[2] = (Button) findViewById(R.id.button3);
 
-        textView[0]=(TextView)findViewById(R.id.textView);
-        textView[1]=(TextView)findViewById(R.id.textView2);
+        textView[0] = (TextView) findViewById(R.id.textView);
+        textView[1] = (TextView) findViewById(R.id.textView2);
 
-        goButton=(Button)findViewById(R.id.button4);
+        goButton = (Button) findViewById(R.id.button4);
 
         buttons[0].setAlpha(0.2f);
         buttons[1].setAlpha(1f);
         buttons[2].setAlpha(0.2f);
-
 
 
         // create RangeSeekBar as Integer range between 2 and 16
@@ -113,22 +115,21 @@ public class MainActivity extends Activity {
         textView[1].setText("8");
 
 
-
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-                lowBoundary= minValue;
+                lowBoundary = minValue;
                 highBoundary = maxValue;
 
-                textView[0].setText(""+(float)(minValue)/2);
-                textView[1].setText(""+(float)(maxValue)/2);
+                textView[0].setText("" + (float) (minValue) / 2);
+                textView[1].setText("" + (float) (maxValue) / 2);
                 Log.i("TAG1", "User selected new range values: MIN=" + minValue + ", MAX=" + maxValue);
             }
         });
         editText = (EditText) findViewById(R.id.editText);
 
 
-        View.OnTouchListener onTouchListener =  new View.OnTouchListener() {
+        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (v == (View) editText) {
@@ -153,7 +154,7 @@ public class MainActivity extends Activity {
                     buttons[2].setAlpha(1f);
                 }
                 if (v == (View) goButton) {
-                    if(selectiondone) {
+                    if (selectiondone||debug) {
                         exitFormAndGoToSwiping();
                     }
                 }
@@ -172,8 +173,9 @@ public class MainActivity extends Activity {
         layout.addView(seekBar);
     }
 
-    private void exitFormAndGoToSwiping(){
-        InputValues input = new InputValues(location,choosenMoneyRange,lowBoundary,highBoundary);
+    private void exitFormAndGoToSwiping() {
+
+
 
         /*
         String str = input.serialise();
@@ -182,7 +184,10 @@ public class MainActivity extends Activity {
         */
 
         Intent intent = new Intent(this, SwipeActivity.class);
-        intent.putExtra("InputValues", input.serialise());
+        if(!debug){
+            InputValues input = new InputValues(location, choosenMoneyRange, lowBoundary, highBoundary);
+            intent.putExtra("InputValues", input.serialise());
+        }
         startActivity(intent);
 
     }
@@ -217,9 +222,6 @@ public class MainActivity extends Activity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString("STATE_MONEY", ""+choosenMoneyRange);
-        savedInstanceState.putString("LOW_BOUND", ""+lowBoundary);
-        savedInstanceState.putString("HIGH_BOUND", ""+highBoundary);
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }

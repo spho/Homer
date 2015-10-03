@@ -32,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         setUpMapIfNeeded();
         showMap();
     }
@@ -92,6 +93,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         intent.putExtra("knownname", currentLocation.getKnownName());
         intent.putExtra("postal", currentLocation.getPostalCode());
         intent.putExtra("state", currentLocation.getState());
+
         startActivity(intent);
 
     }
