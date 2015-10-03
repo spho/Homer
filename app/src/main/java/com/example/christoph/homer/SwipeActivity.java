@@ -55,13 +55,16 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 //        buildCards(CachedResponse.getInstance().getApartment(0,0));
 
 
-/*
-            apartementArray.add(new Apartment(0, 1450, 40, "Schoene Wohnung in Schwamendingen", "Sehr ruhige Lage", null, "Roswiesenstrasse 120",0));
-            apartementArray.add(new Apartment(1, 1230, 10, "Traumhafte Wohnung", "Toller Garten!", null, "Sumpfgasse 4",0));
-            apartementArray.add(new Apartment(2, 900, 45, "Wo isch de ben ond Igor Wonig", "not needed", null, "Nirgendwo 42",0));
-            apartementArray.add(new Apartment(3, 4000, 5, "Schloss in der Bahnhofsstrasse", "", null, "Bahnhofsstrasse 10",0));
-            buildCards(apartementArray.get(0));
-*/
+
+//            apartementArray.add(new Apartment(0, 1450, 40, "Schoene Wohnung in Schwamendingen", "Sehr ruhige Lage", null, "Roswiesenstrasse 120",0));
+//            apartementArray.add(new Apartment(1, 1230, 10, "Traumhafte Wohnung", "Toller Garten!", null, "Sumpfgasse 4",0));
+//            apartementArray.add(new Apartment(2, 900, 45, "Wo isch de ben ond Igor Wonig", "not needed", null, "Nirgendwo 42",0));
+//            apartementArray.add(new Apartment(3, 4000, 5, "Schloss in der Bahnhofsstrasse", "", null, "Bahnhofsstrasse 10",0));
+        if(CachedResponse.getInstance().getApartment(0,0)!=null) {
+            buildCards(CachedResponse.getInstance().getApartment(0, 0));
+        } else {
+            Toast.makeText(getActivity(), "No results found", Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -104,14 +107,20 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         Log.i("CARDID: ", card.getId());
 
         if(card.getId().equals("cardid_picture")){
-            buildCards(CachedResponse.getInstance().getApartment(0,0));
-            sendSwipeRequest(1);
+            if(CachedResponse.getInstance().getApartment(1,0) != null) {
+                buildCards(CachedResponse.getInstance().getApartment(1, 0));
+                sendSwipeRequest(1);
+            }
         }else if(card.getId().equals("cardid_price")){
-            buildCards(CachedResponse.getInstance().getApartment(0,1));
-            sendSwipeRequest(2);
+            if(CachedResponse.getInstance().getApartment(2,0) != null) {
+                buildCards(CachedResponse.getInstance().getApartment(2, 0));
+                sendSwipeRequest(2);
+            }
         }else if(card.getId().equals("cardid_time")){
-            buildCards(CachedResponse.getInstance().getApartment(0,2));
-            sendSwipeRequest(3);
+            if(CachedResponse.getInstance().getApartment(3,0) != null) {
+                buildCards(CachedResponse.getInstance().getApartment(2, 0));
+                sendSwipeRequest(3);
+            }
         }
 
     }

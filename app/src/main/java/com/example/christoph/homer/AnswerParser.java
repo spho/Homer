@@ -45,6 +45,7 @@ public class AnswerParser {
                 switch (i) {
                     case 0:
                         root = jsonObject.getJSONObject("current");
+                        apartments[i][0] = parseApartment(root);
                         break;
                     case 1:
                         root = jsonObject.getJSONObject("another");
@@ -59,8 +60,9 @@ public class AnswerParser {
                 if(root == null) {
                     throw new JSONException("Fail");
                 }
-                apartments[i][0] = parseApartment(root);
+
                 if(i!=0) {
+                    apartments[i][0] = parseApartment(root.getJSONObject("current"));
                     JSONObject another = root.getJSONObject("another");
                     apartments[i][1] = parseApartment(another);
                     JSONObject cheaper = root.getJSONObject("cheaper");
@@ -78,6 +80,9 @@ public class AnswerParser {
     }
     private Apartment parseApartment(JSONObject jsonObject) throws JSONException {
         int id = jsonObject.getInt("id");
+        if(id == -1) {
+            return null;
+        }
         int price = jsonObject.getInt("price");
         int traveltime = jsonObject.getInt("traveltime");
         String img = jsonObject.getString("img");
@@ -85,5 +90,18 @@ public class AnswerParser {
         String title = jsonObject.getString("title");
         Float rooms = (float) jsonObject.getDouble("rooms");
         return new Apartment(id, price, traveltime, title, "", img, address, rooms, 0);
+    }
+    public String parseSessionId(String answer) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(answer);
+            return jsonObject.getString("sessionid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(jsonObject.length() >0) {
+
+        }
+        return "";
     }
 }
