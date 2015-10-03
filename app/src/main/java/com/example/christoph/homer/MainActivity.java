@@ -61,6 +61,8 @@ public class MainActivity extends Activity {
             String knownName = (String) b.get("knownname");
 
             selectiondone=true;
+            goButton.setAlpha(1f);
+            goButton.setClickable(true);
 
             location = new Location(address, city, state, country, postalCode, knownName);
             if(address!=city) {
@@ -111,6 +113,8 @@ public class MainActivity extends Activity {
         textView[1] = (TextView) findViewById(R.id.textView2);
 
         goButton = (Button) findViewById(R.id.button4);
+        goButton.setAlpha(0.2f);
+        goButton.setClickable(false);
 
         buttons[0].setAlpha(0.2f);
         buttons[1].setAlpha(1f);
