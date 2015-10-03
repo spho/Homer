@@ -12,6 +12,7 @@ public class CachedResponse {
     }
     public static CachedResponse getInstance() {
         if(instance == null) {
+            // allowed in this particular case
             instance = new CachedResponse();
         }
         return instance;
