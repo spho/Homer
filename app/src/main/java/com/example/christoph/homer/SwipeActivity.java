@@ -3,6 +3,7 @@ package com.example.christoph.homer;
 import android.app.Activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -54,6 +55,8 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener{
         if(counter == 4) {
             counter = 0;
         }
+
+        Log.i("CARDID: ", card.getId());
 
     }
 
@@ -109,7 +112,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener{
                         .useDrawableId(drawableWorkaround)
                   //      .setupSupplementalActions(R.layout.picture_card, actions)
                         .build();
-
+        largecardPicture.setId("cardid_picture");
         largecardPicture.setSwipeable(true);
         CardViewNative cardViewPicture = (CardViewNative) findViewById(R.id.card_picture);
         cardViewPicture.setCard(largecardPicture);
@@ -123,6 +126,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener{
         CardThumbnail thumbPrice = new CardThumbnail(this);
         thumbPrice.setDrawableResource(R.drawable.ic_keyboard_arrow_down_black_48dp);
         smallCardPrice.addCardThumbnail(thumbPrice);
+        smallCardPrice.setId("cardid_price");
         smallCardPrice.setSwipeable(true);
         CardView cardViewPrice = (CardView) findViewById(R.id.card_price);
         cardViewPrice.setCard(smallCardPrice);
@@ -135,6 +139,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener{
         CardThumbnail thumbTime = new CardThumbnail(this);
         thumbTime.setDrawableResource(R.drawable.ic_fast_forward_black_48dp);
         smallCardTime.addCardThumbnail(thumbTime);
+        smallCardTime.setId("cardid_picture");
         smallCardTime.setSwipeable(true);
         CardView cardViewTime = (CardView) findViewById(R.id.card_time);
         cardViewTime.setCard(smallCardTime);
