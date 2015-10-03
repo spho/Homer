@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.text.Normalizer;
 
 
 public class MainActivity extends Activity {
@@ -175,8 +176,15 @@ public class MainActivity extends Activity {
                     }
                     if (v == (View) goButton) {
                         if (selectiondone || debug) {
-                            sendInitToServer();
-                            // exitFormAndGoToSwiping();
+                            if(location!=null) {
+                                if(location.getPostalCode()!=null&&location.getCity()!=null&&location.getAddress()!=null) {
+                                    sendInitToServer();
+                                }else{
+
+                                }
+                            }else{
+
+                            }
                         }
                     }
                 }
@@ -270,8 +278,12 @@ public class MainActivity extends Activity {
         goButton.setBackgroundColor(Color.WHITE);
         goButton.setShadowLayer(0, 0, 0, Color.WHITE);
         goButton.setText("Loading");
-       String st =  StringEscapeUtils.escapeHtml4(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
-        st = st.replaceAll(";","&");
+        String theEvilString =ad;
+                theEvilString= Normalizer.normalize(theEvilString,Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]","");
+       String st =  URL + "init?address=" +theEvilString  + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode();
+
+
+
         Log.i("TAG", "Send init request: " +st);
                 new RequestTask(true, this).execute(st);
     }
