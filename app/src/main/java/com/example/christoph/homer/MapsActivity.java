@@ -101,7 +101,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     @Override
     public void onMapClick(LatLng latLng) {
         if (currentLocation != null) {
-            closeMap();
+
         }
 
     }
@@ -111,6 +111,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(latLng).title(latLng.toString()));
         currentLocation = convertToAddress(latLng);
+        closeMap();
 
     }
 
