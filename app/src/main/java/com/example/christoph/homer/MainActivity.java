@@ -2,7 +2,9 @@ package com.example.christoph.homer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,6 +102,7 @@ public class MainActivity extends Activity {
 
 
     private void initUI() {
+
         buttons[0] = (Button) findViewById(R.id.button);
         buttons[1] = (Button) findViewById(R.id.button2);
         buttons[2] = (Button) findViewById(R.id.button3);
@@ -116,8 +119,8 @@ public class MainActivity extends Activity {
 
         // create RangeSeekBar as Integer range between 2 and 16
         seekBar = new RangeSeekBar<Integer>(2, 16, this);
-        textView[0].setText("1");
-        textView[1].setText("8");
+        textView[0].setText("1 rooms");
+        textView[1].setText("8 rooms");
 
 
         seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
@@ -126,13 +129,18 @@ public class MainActivity extends Activity {
                 lowBoundary = minValue;
                 highBoundary = maxValue;
 
-                textView[0].setText("" + (float) (minValue) / 2);
-                textView[1].setText("" + (float) (maxValue) / 2);
+                textView[0].setText("" + (float) (minValue) / 2 + " rooms");
+                textView[1].setText("" + (float) (maxValue) / 2 + " rooms");
                 Log.i("TAG1", "User selected new range values: MIN=" + minValue + ", MAX=" + maxValue);
             }
         });
         editText = (EditText) findViewById(R.id.editText);
-
+        if(editText.length()!=0) {
+            editText.setBackgroundColor(Color.TRANSPARENT);
+            editText.setFocusableInTouchMode(true);
+        } else {
+            editText.setFocusable(false);
+        }
 
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
