@@ -43,6 +43,8 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
+
+        </activity>
         <activity android:name=".SwipeActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -50,7 +52,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
         </activity>
     </application>
 

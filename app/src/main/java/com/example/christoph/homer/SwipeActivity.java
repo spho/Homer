@@ -85,7 +85,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         t2.setOnActionClickListener(new BaseSupplementalAction.OnActionClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(getActivity()," Click on Text LEARN ",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity()," Click on Text INFO ",Toast.LENGTH_SHORT).show();
             }
         });
         actions.add(t2);
