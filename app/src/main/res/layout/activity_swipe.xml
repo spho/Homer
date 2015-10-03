@@ -10,30 +10,43 @@
     android:paddingBottom="0pt"
     tools:context="com.example.christoph.homer.SwipeActivity">
     <LinearLayout
+
         android:id="@+id/cards_linear"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent" >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" >
         <it.gmariotti.cardslib.library.view.CardViewNative
             android:id="@+id/card_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card:card_layout_resourceID="@layout/native_material_largeimage_text_card"
             style="@style/card.native.main_layout" />
-
+            </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" >
         <it.gmariotti.cardslib.library.view.CardView
             android:id="@+id/card_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card:card_layout_resourceID="@layout/card_thumbnail_layout"
             style="@style/card.native.main_layout" />
-
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" >
         <it.gmariotti.cardslib.library.view.CardView
             android:id="@+id/card_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card:card_layout_resourceID="@layout/card_thumbnail_layout"
             style="@style/card.native.main_layout" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
