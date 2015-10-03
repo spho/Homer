@@ -34,6 +34,7 @@ new RequestTask().execute("http://stackoverflow.com");
 
 class RequestTask extends AsyncTask<String, String, String>{
 
+    private static final String TAG = "RequestTask";
     SwipeActivity swipeActivity;
     public RequestTask(SwipeActivity sw){
         swipeActivity=sw;
@@ -46,9 +47,11 @@ class RequestTask extends AsyncTask<String, String, String>{
         HttpResponse response;
         String responseString = null;
         try {
+            Log.i(TAG,"Execute httpget");
             response = httpclient.execute(new HttpGet(uri[0]));
             StatusLine statusLine = response.getStatusLine();
             if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+                Log.i(TAG,"Got valid response");
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 response.getEntity().writeTo(out);
                 responseString = out.toString();
@@ -56,24 +59,31 @@ class RequestTask extends AsyncTask<String, String, String>{
             } else{
                 //Closes the connection.
                 response.getEntity().getContent().close();
+                Log.e(TAG,"Error in status code, got: " + statusLine.getStatusCode());
                 throw new IOException(statusLine.getReasonPhrase());
             }
         } catch (ClientProtocolException e) {
-            //TODO Handle problems..
+            Log.e(TAG,"ClientProtocolException");
+            e.printStackTrace();
         } catch (IOException e) {
-            //TODO Handle problems..
+            Log.e(TAG,"IOException");
+            e.printStackTrace();
         }
         catch (Exception e){
-            System.out.println("Error in request Tastk: "+e.toString());
+            Log.e(TAG,"Error in request Tastk: "+e.toString());
+            e.printStackTrace();
         }
+
         return responseString;
     }
 
     @Override
     protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        Log.i("RequestTask:", "Replay arrived");
-        Log.i("RequestTask:", result);
+      //  super.onPostExecute(result);
+        Log.i(TAG, "Replay arrived");
+        Log.i(TAG, result);
+        AnswerParser ap = new AnswerParser();
+        ap.parse(result);
         swipeActivity.loopFlag=false;
     }
 }

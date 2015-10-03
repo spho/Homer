@@ -6,6 +6,7 @@ package com.example.christoph.homer;
 public class CachedResponse {
     private static CachedResponse instance = null;
 
+    @Deprecated
     protected CachedResponse() {
         // Exists only to defeat instantiation.
     }
