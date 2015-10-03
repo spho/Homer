@@ -35,9 +35,12 @@ new RequestTask().execute("http://stackoverflow.com");
 class RequestTask extends AsyncTask<String, String, String>{
 
     private static final String TAG = "RequestTask";
-    SwipeActivity swipeActivity;
-    public RequestTask(SwipeActivity sw){
-        swipeActivity=sw;
+    private MainActivity mainActivity;
+    private boolean isInInitialisation;
+
+    public RequestTask(boolean isInInitialisation,MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+        this.isInInitialisation = isInInitialisation;
     }
 
 
@@ -59,14 +62,14 @@ class RequestTask extends AsyncTask<String, String, String>{
             } else{
                 //Closes the connection.
                 response.getEntity().getContent().close();
-                Log.e(TAG,"Error in status code, got: " + statusLine.getStatusCode());
+                Log.e(TAG, "Error in status code, got: " + statusLine.getStatusCode());
                 throw new IOException(statusLine.getReasonPhrase());
             }
         } catch (ClientProtocolException e) {
             Log.e(TAG,"ClientProtocolException");
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e(TAG,"IOException");
+            Log.e(TAG, "IOException");
             e.printStackTrace();
         }
         catch (Exception e){
@@ -83,7 +86,12 @@ class RequestTask extends AsyncTask<String, String, String>{
         Log.i(TAG, "Replay arrived");
         Log.i(TAG, result);
         AnswerParser ap = new AnswerParser();
-        ap.parse(result);
-        swipeActivity.loopFlag=false;
+        CachedResponse.getInstance().setApartments(ap.parse(result));
+
+
+        if(isInInitialisation){
+            mainActivity.exitFormAndGoToSwiping();
+        }
+
     }
 }

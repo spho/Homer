@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     private TextView[] textView = new TextView[2];
     private EditText editText;
     private Button goButton;
+    private final String URL = "http://homer-data.azurewebsites.net/";
 
     //Low =1, mid =2, high = 3
     private int choosenMoneyRange = 2;
@@ -61,6 +62,8 @@ public class MainActivity extends Activity {
             String knownName = (String) b.get("knownname");
 
             selectiondone=true;
+            goButton.setAlpha(1f);
+            goButton.setClickable(true);
 
             location = new Location(address, city, state, country, postalCode, knownName);
             if(address!=city) {
@@ -111,6 +114,8 @@ public class MainActivity extends Activity {
         textView[1] = (TextView) findViewById(R.id.textView2);
 
         goButton = (Button) findViewById(R.id.button4);
+        goButton.setAlpha(0.2f);
+        goButton.setClickable(false);
 
         buttons[0].setAlpha(0.2f);
         buttons[1].setAlpha(1f);
@@ -145,30 +150,33 @@ public class MainActivity extends Activity {
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (v == (View) editText) {
-                    changeToMap();
-                }
-                if (v == (View) buttons[0]) {
-                    choosenMoneyRange = 1;
-                    buttons[0].setAlpha(1f);
-                    buttons[1].setAlpha(0.2f);
-                    buttons[2].setAlpha(0.2f);
-                }
-                if (v == (View) buttons[1]) {
-                    choosenMoneyRange = 2;
-                    buttons[0].setAlpha(0.2f);
-                    buttons[1].setAlpha(1f);
-                    buttons[2].setAlpha(0.2f);
-                }
-                if (v == (View) buttons[2]) {
-                    choosenMoneyRange = 3;
-                    buttons[0].setAlpha(0.2f);
-                    buttons[1].setAlpha(0.2f);
-                    buttons[2].setAlpha(1f);
-                }
-                if (v == (View) goButton) {
-                    if (selectiondone||debug) {
-                        exitFormAndGoToSwiping();
+                if(event.ACTION_UP == MotionEvent.ACTION_UP) {
+                    if (v == (View) editText) {
+                        changeToMap();
+                    }
+                    if (v == (View) buttons[0]) {
+                        choosenMoneyRange = 1;
+                        buttons[0].setAlpha(1f);
+                        buttons[1].setAlpha(0.2f);
+                        buttons[2].setAlpha(0.2f);
+                    }
+                    if (v == (View) buttons[1]) {
+                        choosenMoneyRange = 2;
+                        buttons[0].setAlpha(0.2f);
+                        buttons[1].setAlpha(1f);
+                        buttons[2].setAlpha(0.2f);
+                    }
+                    if (v == (View) buttons[2]) {
+                        choosenMoneyRange = 3;
+                        buttons[0].setAlpha(0.2f);
+                        buttons[1].setAlpha(0.2f);
+                        buttons[2].setAlpha(1f);
+                    }
+                    if (v == (View) goButton) {
+                        if (selectiondone || debug) {
+                            sendInitToServer();
+                            // exitFormAndGoToSwiping();
+                        }
                     }
                 }
                 return true; // return is important...
@@ -186,7 +194,7 @@ public class MainActivity extends Activity {
         layout.addView(seekBar);
     }
 
-    private void exitFormAndGoToSwiping() {
+    public void exitFormAndGoToSwiping() {
 
         /*
         String str = input.serialise();
@@ -236,6 +244,31 @@ public class MainActivity extends Activity {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+
+    private void sendInitToServer() {
+        InputValues inputValues = new InputValues(location, choosenMoneyRange, lowBoundary, highBoundary);
+        String ad = inputValues.getLocation().getAddress() + "+" +inputValues.getLocation().getCity();
+        ad = ad.replaceAll(" ", "+");
+        String ml;
+        switch (inputValues.getMoneyLevel()) {
+            case 1:
+                ml = "low";
+                break;
+            case 2:
+                ml = "med";
+                break;
+            case 3:
+                ml = "high";
+                break;
+            default:
+                ml = "";
+                break;
+        }
+        Log.i("TAG", "Send init request");
+        new RequestTask(true,this).execute(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
+
+    }
+
 
 
 }
