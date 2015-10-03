@@ -103,13 +103,13 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 
         Log.i("CARDID: ", card.getId());
 
-        if(card.getId()=="cardid_picture"){
+        if(card.getId().equals("cardid_picture")){
             buildCards(CachedResponse.getInstance().getApartment(0,0));
             sendSwipeRequest(1);
-        }else if(card.getId()=="cardid_price"){
+        }else if(card.getId().equals("cardid_price")){
             buildCards(CachedResponse.getInstance().getApartment(0,1));
             sendSwipeRequest(2);
-        }else if(card.getId()=="cardid_time"){
+        }else if(card.getId().equals("cardid_time")){
             buildCards(CachedResponse.getInstance().getApartment(0,2));
             sendSwipeRequest(3);
         }
