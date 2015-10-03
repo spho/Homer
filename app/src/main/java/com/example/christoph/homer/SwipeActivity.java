@@ -107,9 +107,9 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 
         // Create a Card
         Card smallCardPrice = new Card(this, R.layout.row_card);
-        smallCardPrice.setTitle("Price");
+        smallCardPrice.setTitle("Price per month");
         CardThumbnail thumbPrice = new CardThumbnail(this);
-        thumbPrice.setDrawableResource(android.R.drawable.ic_delete);
+        thumbPrice.setDrawableResource(R.drawable.ic_keyboard_arrow_down_black_48dp);
         smallCardPrice.addCardThumbnail(thumbPrice);
         smallCardPrice.setSwipeable(true);
         CardView cardViewPrice = (CardView) findViewById(R.id.card_price);
@@ -118,9 +118,9 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         smallCardPrice.setOnSwipeListener(this);
 
         Card smallCardTime = new Card(this, R.layout.row_card);
-        smallCardTime.setTitle("Price");
+        smallCardTime.setTitle("Time to work");
         CardThumbnail thumbTime = new CardThumbnail(this);
-        thumbTime.setDrawableResource(android.R.drawable.ic_btn_speak_now);
+        thumbTime.setDrawableResource(R.drawable.ic_fast_forward_black_48dp);
         smallCardTime.addCardThumbnail(thumbTime);
         smallCardTime.setSwipeable(true);
         CardView cardViewTime = (CardView) findViewById(R.id.card_time);
