@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.Normalizer;
 
@@ -30,10 +31,12 @@ public class MainActivity extends Activity {
     private Button goButton;
     private final String URL = "http://homer-data.azurewebsites.net/";
 
+
     //Low =1, mid =2, high = 3
     private int choosenMoneyRange = 2;
     private int lowBoundary = 1;
     private int highBoundary = 8;
+
 
 
     private boolean debug = false;
@@ -80,21 +83,33 @@ public class MainActivity extends Activity {
 
 
 
-        switch (choosenMoneyRange) {
+        switch (CachedMainSettings.getInstance().getSavedDollarSelector()) {
             case 1:
                 buttons[0].setPressed(true);
                 buttons[1].setPressed(false);
                 buttons[2].setPressed(false);
+                buttons[0].setAlpha(1f);
+                buttons[1].setAlpha(0.2f);
+                buttons[2].setAlpha(0.2f);
+                choosenMoneyRange=1;
                 break;
             case 2:
                 buttons[0].setPressed(false);
                 buttons[1].setPressed(true);
                 buttons[2].setPressed(false);
+                buttons[0].setAlpha(0.2f);
+                buttons[1].setAlpha(1f);
+                buttons[2].setAlpha(0.2f);
+                choosenMoneyRange=2;
                 break;
             case 3:
                 buttons[0].setPressed(false);
                 buttons[1].setPressed(false);
                 buttons[2].setPressed(true);
+                buttons[0].setAlpha(0.2f);
+                buttons[1].setAlpha(0.2f);
+                buttons[2].setAlpha(1f);
+                choosenMoneyRange=3;
                 break;
             default:
                 break;
@@ -174,16 +189,18 @@ public class MainActivity extends Activity {
                         buttons[1].setAlpha(0.2f);
                         buttons[2].setAlpha(1f);
                     }
+                    CachedMainSettings.getInstance().setSavedDollarSelector(choosenMoneyRange);
                     if (v == (View) goButton) {
                         if (selectiondone || debug) {
                             if(location!=null) {
                                 if(location.getPostalCode()!=null&&location.getCity()!=null&&location.getAddress()!=null) {
                                     sendInitToServer();
                                 }else{
+                                    Toast.makeText(getApplicationContext(), "Invalid Location selected", Toast.LENGTH_SHORT).show();
 
                                 }
                             }else{
-
+                                Toast.makeText(getApplicationContext(), "Invalid Location selected", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
