@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 
 public class MainActivity extends Activity {
@@ -267,11 +268,12 @@ public class MainActivity extends Activity {
         goButton.setClickable(false);
         goButton.setEnabled(false);
         goButton.setBackgroundColor(Color.WHITE);
-        goButton.setShadowLayer(0,0,0,Color.WHITE);
+        goButton.setShadowLayer(0, 0, 0, Color.WHITE);
         goButton.setText("Loading");
-        Log.i("TAG", "Send init request: "+URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
-        new RequestTask(true,this).execute(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
-
+       String st =  StringEscapeUtils.escapeHtml4(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
+        st = st.replaceAll(";","&");
+        Log.i("TAG", "Send init request: " +st);
+                new RequestTask(true, this).execute(st);
     }
 
 
