@@ -150,31 +150,33 @@ public class MainActivity extends Activity {
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (v == (View) editText) {
-                    changeToMap();
-                }
-                if (v == (View) buttons[0]) {
-                    choosenMoneyRange = 1;
-                    buttons[0].setAlpha(1f);
-                    buttons[1].setAlpha(0.2f);
-                    buttons[2].setAlpha(0.2f);
-                }
-                if (v == (View) buttons[1]) {
-                    choosenMoneyRange = 2;
-                    buttons[0].setAlpha(0.2f);
-                    buttons[1].setAlpha(1f);
-                    buttons[2].setAlpha(0.2f);
-                }
-                if (v == (View) buttons[2]) {
-                    choosenMoneyRange = 3;
-                    buttons[0].setAlpha(0.2f);
-                    buttons[1].setAlpha(0.2f);
-                    buttons[2].setAlpha(1f);
-                }
-                if (v == (View) goButton) {
-                    if (selectiondone||debug) {
-                        sendInitToServer();
-                       // exitFormAndGoToSwiping();
+                if(event.ACTION_UP == MotionEvent.ACTION_UP) {
+                    if (v == (View) editText) {
+                        changeToMap();
+                    }
+                    if (v == (View) buttons[0]) {
+                        choosenMoneyRange = 1;
+                        buttons[0].setAlpha(1f);
+                        buttons[1].setAlpha(0.2f);
+                        buttons[2].setAlpha(0.2f);
+                    }
+                    if (v == (View) buttons[1]) {
+                        choosenMoneyRange = 2;
+                        buttons[0].setAlpha(0.2f);
+                        buttons[1].setAlpha(1f);
+                        buttons[2].setAlpha(0.2f);
+                    }
+                    if (v == (View) buttons[2]) {
+                        choosenMoneyRange = 3;
+                        buttons[0].setAlpha(0.2f);
+                        buttons[1].setAlpha(0.2f);
+                        buttons[2].setAlpha(1f);
+                    }
+                    if (v == (View) goButton) {
+                        if (selectiondone || debug) {
+                            sendInitToServer();
+                            // exitFormAndGoToSwiping();
+                        }
                     }
                 }
                 return true; // return is important...
