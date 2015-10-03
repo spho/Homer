@@ -11,9 +11,10 @@ public class Apartment {
     private String comment;
     private String image;
     private String address;
+    private int sequenceId;
 
 
-    public Apartment(int id, int price, int traveltime, String title, String comment, String image, String address) {
+    public Apartment(int id, int price, int traveltime, String title, String comment, String image, String address, int sequenceId) {
         this.id = id;
         this.price = price;
         this.traveltime = traveltime;
@@ -21,6 +22,7 @@ public class Apartment {
         this.comment = comment;
         this.image = image;
         this.address = address;
+        this.sequenceId= sequenceId;
     }
 
     public String getComment() {
@@ -77,5 +79,13 @@ public class Apartment {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getSequenceId() {
+        return sequenceId;
+    }
+
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
     }
 }

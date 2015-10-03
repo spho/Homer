@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
     private int highBoundary = 8;
 
 
-    private boolean debug = true;
+    private boolean debug = false;
 
     private boolean selectiondone = false;
 
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
             String postalCode = (String) b.get("postal");
             String knownName = (String) b.get("knownname");
 
-
+            selectiondone=true;
 
             location = new Location(address, city, state, country, postalCode, knownName);
             if(address!=city) {
