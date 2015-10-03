@@ -49,7 +49,6 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
             inputValues.desirialise((String) b.get("InputValues"));
         }
 
-        sendInitToServer();
 //        while (loopFlag){
 //
 //        }
@@ -70,28 +69,6 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         return this;
     }
 
-    private void sendInitToServer() {
-        String ad = inputValues.getLocation().getAddress() + "+" +inputValues.getLocation().getCity();
-        ad = ad.replaceAll(" ", "+");
-        String ml;
-        switch (inputValues.getMoneyLevel()) {
-            case 1:
-                ml = "low";
-                break;
-            case 2:
-                ml = "med";
-                break;
-            case 3:
-                ml = "high";
-                break;
-            default:
-                ml = "";
-                break;
-        }
-        Log.i(TAG, "Send init request");
-        new RequestTask(this).execute(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
-
-    }
 
     //Case 1 = another, case 2 = cheaper, case 3 = closer
     private void sendSwipeRequest(int case_t) {
@@ -110,7 +87,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 break;
         }
         Log.i(TAG, "Send swipe request " + str);
-        new RequestTask(this).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
+        new RequestTask(false,null).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
     }
 
     @Override

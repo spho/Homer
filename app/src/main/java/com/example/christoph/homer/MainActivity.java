@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     private TextView[] textView = new TextView[2];
     private EditText editText;
     private Button goButton;
+    private final String URL = "http://homer-data.azurewebsites.net/";
 
     //Low =1, mid =2, high = 3
     private int choosenMoneyRange = 2;
@@ -172,7 +173,8 @@ public class MainActivity extends Activity {
                 }
                 if (v == (View) goButton) {
                     if (selectiondone||debug) {
-                        exitFormAndGoToSwiping();
+                        sendInitToServer();
+                       // exitFormAndGoToSwiping();
                     }
                 }
                 return true; // return is important...
@@ -190,7 +192,7 @@ public class MainActivity extends Activity {
         layout.addView(seekBar);
     }
 
-    private void exitFormAndGoToSwiping() {
+    public void exitFormAndGoToSwiping() {
 
         /*
         String str = input.serialise();
@@ -240,6 +242,31 @@ public class MainActivity extends Activity {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+
+    private void sendInitToServer() {
+        InputValues inputValues = new InputValues(location, choosenMoneyRange, lowBoundary, highBoundary);
+        String ad = inputValues.getLocation().getAddress() + "+" +inputValues.getLocation().getCity();
+        ad = ad.replaceAll(" ", "+");
+        String ml;
+        switch (inputValues.getMoneyLevel()) {
+            case 1:
+                ml = "low";
+                break;
+            case 2:
+                ml = "med";
+                break;
+            case 3:
+                ml = "high";
+                break;
+            default:
+                ml = "";
+                break;
+        }
+        Log.i("TAG", "Send init request");
+        new RequestTask(true,this).execute(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
+
+    }
+
 
 
 }
