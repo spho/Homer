@@ -264,7 +264,12 @@ public class MainActivity extends Activity {
                 ml = "";
                 break;
         }
-        Log.i("TAG", "Send init request");
+        goButton.setClickable(false);
+        goButton.setEnabled(false);
+        goButton.setBackgroundColor(Color.WHITE);
+        goButton.setShadowLayer(0,0,0,Color.WHITE);
+        goButton.setText("Loading");
+        Log.i("TAG", "Send init request: "+URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
         new RequestTask(true,this).execute(URL + "init?address=" + ad + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode());
 
     }
