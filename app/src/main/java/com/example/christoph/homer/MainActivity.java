@@ -3,7 +3,6 @@ package com.example.christoph.homer;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,10 +33,40 @@ public class MainActivity extends Activity {
     private boolean selectiondone = false;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        try {
+            if(savedInstanceState!=null)
+            choosenMoneyRange = savedInstanceState.getInt("STATE_MONEY");
+            lowBoundary = savedInstanceState.getInt("LOW_BOUND");
+            highBoundary = savedInstanceState.getInt("HIGH_BOUND");
+            switch(choosenMoneyRange){
+                case 1:buttons[0].setPressed(true);
+                    buttons[1].setPressed(false);
+                    buttons[2].setPressed(false);
+                    break;
+                case 2:buttons[0].setPressed(false);
+                    buttons[1].setPressed(true);
+                    buttons[2].setPressed(false);
+                    break;
+                case 3:buttons[0].setPressed(false);
+                    buttons[1].setPressed(false);
+                    buttons[2].setPressed(true);
+                    break;
+                default:
+                    break;
+            }
+
+        }catch (Exception e){
+
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
 
         initUI();
@@ -152,10 +181,9 @@ public class MainActivity extends Activity {
         in2.desirialise(str);
         */
 
-        System.out.println();
-       // Intent intent = new Intent(this, Swipe.class);
-       // intent.putExtra("InputValues", input.serialise());
-       // startActivity(intent);
+        Intent intent = new Intent(this, SwipeActivity.class);
+        intent.putExtra("InputValues", input.serialise());
+        startActivity(intent);
 
     }
 
@@ -185,6 +213,15 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("STATE_MONEY", ""+choosenMoneyRange);
+        savedInstanceState.putString("LOW_BOUND", ""+lowBoundary);
+        savedInstanceState.putString("HIGH_BOUND", ""+highBoundary);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 

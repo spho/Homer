@@ -7,7 +7,7 @@ import java.io.InputStream;
  */
 public class InputValues {
 
-    private Location location = new Location();;
+    private Location location = new Location();
     private int moneyLevel = -1;
     private int lowerRoomBoundary = -1;
     private int upperRoomBoundary = -1;
