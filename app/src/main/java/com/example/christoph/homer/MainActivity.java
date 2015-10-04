@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,12 +38,6 @@ public class MainActivity extends Activity {
     private int highBoundary = 8;
 
 
-
-    private boolean debug = false;
-
-    private boolean selectiondone = false;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,21 +62,18 @@ public class MainActivity extends Activity {
             String postalCode = (String) b.get("postal");
             String knownName = (String) b.get("knownname");
 
-            selectiondone=true;
             goButton.setAlpha(1f);
             goButton.setClickable(true);
 
             location = new Location(address, city, state, country, postalCode, knownName);
-            if(address!=city) {
+            if (address != city) {
                 editText.setText(address + ", " + city);
-            }
-            else{
+            } else {
                 editText.setText(address);
             }
 
 
         }
-
 
 
         switch (CachedMainSettings.getInstance().getSavedDollarSelector()) {
@@ -94,7 +84,7 @@ public class MainActivity extends Activity {
                 buttons[0].setAlpha(1f);
                 buttons[1].setAlpha(0.2f);
                 buttons[2].setAlpha(0.2f);
-                choosenMoneyRange=1;
+                choosenMoneyRange = 1;
                 break;
             case 2:
                 buttons[0].setPressed(false);
@@ -103,7 +93,7 @@ public class MainActivity extends Activity {
                 buttons[0].setAlpha(0.2f);
                 buttons[1].setAlpha(1f);
                 buttons[2].setAlpha(0.2f);
-                choosenMoneyRange=2;
+                choosenMoneyRange = 2;
                 break;
             case 3:
                 buttons[0].setPressed(false);
@@ -112,7 +102,7 @@ public class MainActivity extends Activity {
                 buttons[0].setAlpha(0.2f);
                 buttons[1].setAlpha(0.2f);
                 buttons[2].setAlpha(1f);
-                choosenMoneyRange=3;
+                choosenMoneyRange = 3;
                 break;
             default:
                 break;
@@ -160,7 +150,7 @@ public class MainActivity extends Activity {
             }
         });
         editText = (EditText) findViewById(R.id.editText);
-        if(editText.length()!=0) {
+        if (editText.length() != 0) {
             editText.setBackgroundColor(Color.TRANSPARENT);
             editText.setFocusableInTouchMode(true);
         } else {
@@ -170,7 +160,7 @@ public class MainActivity extends Activity {
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.ACTION_UP == MotionEvent.ACTION_UP) {
+                if (event.ACTION_UP == MotionEvent.ACTION_UP) {
                     if (v == (View) editText) {
                         changeToMap();
                     }
@@ -194,18 +184,18 @@ public class MainActivity extends Activity {
                     }
                     CachedMainSettings.getInstance().setSavedDollarSelector(choosenMoneyRange);
                     if (v == (View) goButton) {
-                        if (selectiondone || debug) {
-                            if(location!=null) {
-                                if(location.getPostalCode()!=null&&location.getCity()!=null&&location.getAddress()!=null) {
-                                    sendInitToServer();
-                                }else{
-                                    Toast.makeText(getApplicationContext(), "Invalid Location selected", Toast.LENGTH_SHORT).show();
 
-                                }
-                            }else{
+                        if (location != null) {
+                            if (location.getPostalCode() != null && location.getCity() != null && location.getAddress() != null) {
+                                sendInitToServer();
+                            } else {
                                 Toast.makeText(getApplicationContext(), "Invalid Location selected", Toast.LENGTH_SHORT).show();
+
                             }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Invalid Location selected", Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 }
                 return true; // return is important...
@@ -232,10 +222,9 @@ public class MainActivity extends Activity {
         */
 
         Intent intent = new Intent(this, SwipeActivity.class);
-        if(!debug){
-            InputValues input = new InputValues(location, choosenMoneyRange, lowBoundary, highBoundary);
-            intent.putExtra("InputValues", input.serialise());
-        }
+
+        InputValues input = new InputValues(location, choosenMoneyRange, lowBoundary, highBoundary);
+        intent.putExtra("InputValues", input.serialise());
         startActivity(intent);
 
     }
@@ -276,7 +265,7 @@ public class MainActivity extends Activity {
 
     private void sendInitToServer() {
         InputValues inputValues = new InputValues(location, choosenMoneyRange, lowBoundary, highBoundary);
-        String ad = inputValues.getLocation().getAddress() + "+" +inputValues.getLocation().getCity();
+        String ad = inputValues.getLocation().getAddress() + "+" + inputValues.getLocation().getCity();
         ad = ad.replaceAll(" ", "+");
         String ml;
         switch (inputValues.getMoneyLevel()) {
@@ -298,16 +287,14 @@ public class MainActivity extends Activity {
         goButton.setBackgroundColor(Color.WHITE);
         goButton.setShadowLayer(0, 0, 0, Color.WHITE);
         goButton.setText("Loading");
-        String theEvilString =ad;
-                theEvilString= Normalizer.normalize(theEvilString,Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]","");
-       String st =  URL + "init?address=" +theEvilString  + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode();
+        String theEvilString = ad;
+        theEvilString = Normalizer.normalize(theEvilString, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+        String st = URL + "init?address=" + theEvilString + "&roomslower=" + (float) ((float) (inputValues.getLowerRoomBoundary()) / 2) + "&roomsupper=" + (float) ((float) (inputValues.getUpperRoomBoundary()) / 2) + "&pricelevel=" + ml + "&zip=" + inputValues.getLocation().getPostalCode();
 
 
-
-        Log.i("TAG", "Send init request: " +st);
-                new RequestTask(true, this).execute(st);
+        Log.i("TAG", "Send init request: " + st);
+        new RequestTask(true, this).execute(st);
     }
-
 
 
 }
