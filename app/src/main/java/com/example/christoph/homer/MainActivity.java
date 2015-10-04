@@ -213,6 +213,14 @@ public class MainActivity extends Activity {
         layout.addView(seekBar);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item= menu.findItem(R.id.action_settings);
+        item.setVisible(false);
+        super.onPrepareOptionsMenu(menu);
+        return true;
+    }
+
     public void exitFormAndGoToSwiping() {
 
         /*
