@@ -86,8 +86,14 @@ class RequestTask extends AsyncTask<String, String, String>{
         Log.i(TAG, "Answer arrived");
         Log.i(TAG, result);
         AnswerParser ap = new AnswerParser();
-        CachedResponse.getInstance().setApartments(ap.parse(result));
-        CachedResponse.getInstance().setSessionid(ap.parseSessionId(result));
+        Apartment[][] apartments = ap.parse(result);
+        if(apartments!=null) {
+            CachedResponse.getInstance().setApartments(apartments);
+        }
+        String sessionId = ap.parseSessionId(result);
+        if(sessionId != null && !sessionId.equals("")) {
+            CachedResponse.getInstance().setSessionid(sessionId);
+        }
 
         if(isInInitialisation){
             mainActivity.exitFormAndGoToSwiping();

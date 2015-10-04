@@ -110,7 +110,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 buildCards(CachedResponse.getInstance().getApartment(1, 0));
                 sendSwipeRequest(1);
             } else {
-                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "No alternative items found", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         } else if(card.getId().equals("cardid_price")){
@@ -118,15 +118,15 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 buildCards(CachedResponse.getInstance().getApartment(2, 0));
                 sendSwipeRequest(2);
             } else {
-                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "No cheaper items found", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         } else if(card.getId().equals("cardid_time")){
             if(CachedResponse.getInstance().getApartment(3,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
-                buildCards(CachedResponse.getInstance().getApartment(2, 0));
+                buildCards(CachedResponse.getInstance().getApartment(3, 0));
                 sendSwipeRequest(3);
             } else {
-                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "No quicker items found", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         }
@@ -158,28 +158,12 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
             }
         });
         actions.add(t2);
-        // TODO make this real
-        /*int drawableWorkaround = R.drawable.flat1;
-        switch (apartment.getId()) {
-            case 0:
-                drawableWorkaround = R.drawable.flat1;
-                break;
-            case 1:
-                drawableWorkaround = R.drawable.flat2;
-                break;
-            case 2:
-                drawableWorkaround = R.drawable.flat3;
-                break;
-            case 3:
-                drawableWorkaround = R.drawable.flat4;
-                break;
-        }
-*/
+
         MaterialLargeImageCard largecardPicture = null;
         if(apartment.getImage() != null && apartment.getImage()!="") {
             largecardPicture = MaterialLargeImageCard.with(getActivity())
                     .setTitle(apartment.getTitle())
-                    .setSubTitle(apartment.getAddress())
+                    .setSubTitle(apartment.getAddress()+" - Z: " + apartment.getRooms())
                     .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
                         @Override
                         public void setupInnerViewElements(ViewGroup parent, View viewImage) {
