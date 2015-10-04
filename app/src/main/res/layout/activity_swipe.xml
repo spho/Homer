@@ -18,11 +18,11 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="300dp" >
+            android:layout_height="310dp" >
         <it.gmariotti.cardslib.library.view.CardViewNative
             android:id="@+id/card_picture"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             card:card_layout_resourceID="@layout/native_material_largeimage_text_card"
             style="@style/card.native.main_layout" />
             </LinearLayout>
