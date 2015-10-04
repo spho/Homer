@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -109,7 +110,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 buildCards(CachedResponse.getInstance().getApartment(1, 0));
                 sendSwipeRequest(1);
             } else {
-                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         } else if(card.getId().equals("cardid_price")){
@@ -117,7 +118,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 buildCards(CachedResponse.getInstance().getApartment(2, 0));
                 sendSwipeRequest(2);
             } else {
-                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         } else if(card.getId().equals("cardid_time")){
@@ -125,7 +126,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 buildCards(CachedResponse.getInstance().getApartment(2, 0));
                 sendSwipeRequest(3);
             } else {
-                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         }
@@ -200,7 +201,9 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                     .build();
         }
         largecardPicture.setId("cardid_picture");
-        largecardPicture.setSwipeable(true);
+        if(CachedResponse.getInstance().getApartment(1,0) != null && CachedResponse.getInstance().getApartment(1,0).getId()!= -1) {
+            largecardPicture.setSwipeable(true);
+        }
         CardViewNative cardViewPicture = (CardViewNative) findViewById(R.id.card_picture);
         cardViewPicture.setCard(largecardPicture);
         //You can set a SwipeListener.
@@ -214,7 +217,9 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         thumbPrice.setDrawableResource(R.drawable.ic_keyboard_arrow_down_black_48dp);
         smallCardPrice.addCardThumbnail(thumbPrice);
         smallCardPrice.setId("cardid_price");
-        smallCardPrice.setSwipeable(true);
+        if(CachedResponse.getInstance().getApartment(2,0) != null && CachedResponse.getInstance().getApartment(2,0).getId()!= -1) {
+            smallCardPrice.setSwipeable(true);
+        }
         CardView cardViewPrice = (CardView) findViewById(R.id.card_price);
         cardViewPrice.setCard(smallCardPrice);
         //You can set a SwipeListener.
@@ -227,7 +232,9 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         thumbTime.setDrawableResource(R.drawable.ic_fast_forward_black_48dp);
         smallCardTime.addCardThumbnail(thumbTime);
         smallCardTime.setId("cardid_time");
-        smallCardTime.setSwipeable(true);
+        if(CachedResponse.getInstance().getApartment(3,0) != null && CachedResponse.getInstance().getApartment(3,0).getId()!= -1) {
+            smallCardTime.setSwipeable(true);
+        }
         CardView cardViewTime = (CardView) findViewById(R.id.card_time);
         cardViewTime.setCard(smallCardTime);
         //You can set a SwipeListener.
@@ -240,11 +247,14 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 //        switch(event.getAction())
 //        {
 //            case MotionEvent.ACTION_DOWN:
-//                swipe1 = event.getY();
+//                swipe1 = event.getRawY();
+//                Log.i(TAG, String.valueOf(swipe1));
 //                break;
 //            case MotionEvent.ACTION_UP:
-//                swipe2 = event.getY();
+//                swipe2 = event.getRawY();
+//                Log.i(TAG, String.valueOf(swipe2) );
 //                float deltaY = swipe2 - swipe1;
+//                Log.i(TAG, String.valueOf(deltaY));
 //                if (Math.abs(deltaY) > MIN_DISTANCE)
 //                {
 //                    Toast.makeText(this, "Bookmarked", Toast.LENGTH_SHORT).show ();
