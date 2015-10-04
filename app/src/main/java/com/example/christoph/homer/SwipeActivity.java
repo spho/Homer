@@ -4,13 +4,18 @@ import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -34,8 +39,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     private final String URL = "http://homer-data.azurewebsites.net/";
     private InputValues inputValues = new InputValues();
     private ImageView starView;
-
-    public boolean loopFlag = true;
+    private static final int RESULT_SETTINGS = 1;
 
     // TODO remove
     // int counter = 1;
@@ -238,4 +242,22 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         //You can set a SwipeListener.
         smallCardTime.setOnSwipeListener(this);
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                Intent i = new Intent(this, ApartmentPreferencesActivity.class);
+                startActivityForResult(i, RESULT_SETTINGS);
+                break;
+
+        }
+        return true;
+    }
+
 }

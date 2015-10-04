@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Availability" >
+        <ListPreference
+            android:key="move-int"
+            android:entries="@array/Availability"
+            android:entryValues="@array/AvailabilityValues"
+            android:summary=""
+            android:defaultValue="Immediately"
+            android:title="Move-in" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Features and furnishings" >
+        <CheckBoxPreference
+            android:title="Balcony"
+            android:key="prefBalcony"/>
+        <CheckBoxPreference
+            android:title="Elevator"
+            android:key="prefElevator"/>
+        <CheckBoxPreference
+            android:title="Garage"
+            android:key="prefGarage"/>
+        <CheckBoxPreference
+            android:title="ISDN Connection"
+            android:key="prefIsdn"/>
+        <CheckBoxPreference
+            android:title="Cable TV"
+            android:key="prevCable"/>
+        <CheckBoxPreference
+            android:title="Fireplace"
+            android:key="prefFireplace"/>
+        <CheckBoxPreference
+            android:title="Garden"
+            android:key="prefGarden"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
