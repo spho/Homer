@@ -176,7 +176,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         }
 */
         MaterialLargeImageCard largecardPicture = null;
-        if(apartment.getImage()!="") {
+        if(apartment.getImage() != null && apartment.getImage()!="") {
             largecardPicture = MaterialLargeImageCard.with(getActivity())
                     .setTitle(apartment.getTitle())
                     .setSubTitle(apartment.getAddress())
