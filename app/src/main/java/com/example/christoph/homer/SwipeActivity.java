@@ -33,7 +33,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     static final int MIN_DISTANCE = 300;
     private final String URL = "http://homer-data.azurewebsites.net/";
     private InputValues inputValues = new InputValues();
-    final ImageView imageView = (ImageView)findViewById(R.id.actionbarstar);
+    private ImageView starView;
 
     public boolean loopFlag = true;
 
@@ -46,7 +46,6 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_swipe);
 
-
         handleActionBar();
 
         Intent iin = getIntent();
@@ -54,18 +53,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         if (b != null) {
             inputValues.desirialise((String) b.get("InputValues"));
         }
-
-//        while (loopFlag){
-//
-//        }
-//        buildCards(CachedResponse.getInstance().getApartment(0,0));
-
-
-//            apartementArray.add(new Apartment(0, 1450, 40, "Schoene Wohnung in Schwamendingen", "Sehr ruhige Lage", null, "Roswiesenstrasse 120",0));
-//            apartementArray.add(new Apartment(1, 1230, 10, "Traumhafte Wohnung", "Toller Garten!", null, "Sumpfgasse 4",0));
-//            apartementArray.add(new Apartment(2, 900, 45, "Wo isch de ben ond Igor Wonig", "not needed", null, "Nirgendwo 42",0));
-//            apartementArray.add(new Apartment(3, 4000, 5, "Schloss in der Bahnhofsstrasse", "", null, "Bahnhofsstrasse 10",0));
-        if (CachedResponse.getInstance().getApartment(0, 0) != null) {
+       if (CachedResponse.getInstance().getApartment(0, 0) != null) {
             buildCards(CachedResponse.getInstance().getApartment(0, 0));
         } else {
             Toast.makeText(getActivity(), "No results found", Toast.LENGTH_LONG).show();
@@ -82,22 +70,21 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         actionBar.setCustomView(R.layout.myfavouriteactionbar);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
-
-
+        starView = (ImageView) findViewById(R.id.actionbarstar);
 
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(v==(View)imageView){
+                if(v==(View)starView){
                     Toast.makeText(getApplicationContext(), "Bookmarked", Toast.LENGTH_SHORT).show ();
-                    imageView.setImageResource(R.drawable.star2);
+                    starView.setImageResource(R.drawable.star2);
                 }
 
                 return true;
             }
         };
 
-        imageView.setOnTouchListener(onTouchListener);
+        starView.setOnTouchListener(onTouchListener);
     }
 
     //Case 1 = another, case 2 = cheaper, case 3 = closer
@@ -123,7 +110,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     @Override
     public void onSwipe(Card card) {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.cards_linear);
-        imageView.setImageResource(R.drawable.star);
+        starView.setImageResource(R.drawable.star);
         //        counter++;
 //        if (counter == 4) {
 //            counter = 0;
@@ -251,33 +238,4 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         //You can set a SwipeListener.
         smallCardTime.setOnSwipeListener(this);
     }
-
-
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event)
-//    {
-//        switch(event.getAction())
-//        {
-//            case MotionEvent.ACTION_DOWN:
-//                swipe1 = event.getRawY();
-//                Log.i(TAG, String.valueOf(swipe1));
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                swipe2 = event.getRawY();
-//                Log.i(TAG, String.valueOf(swipe2) );
-//                float deltaY = swipe2 - swipe1;
-//                Log.i(TAG, String.valueOf(deltaY));
-//                if (Math.abs(deltaY) > MIN_DISTANCE)
-//                {
-//                    Toast.makeText(this, "Bookmarked", Toast.LENGTH_SHORT).show ();
-//                }
-//                else
-//                {
-//                    // consider as something else - a screen tap for example
-//                }
-//                break;
-//        }
-//        return super.onTouchEvent(event);
-//    }
 }
