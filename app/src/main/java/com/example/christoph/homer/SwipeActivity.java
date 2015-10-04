@@ -1,5 +1,6 @@
 package com.example.christoph.homer;
 
+import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Intent;
@@ -31,18 +32,21 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     private float swipe1, swipe2;
     static final int MIN_DISTANCE = 300;
     private final String URL = "http://homer-data.azurewebsites.net/";
-    private InputValues inputValues= new InputValues();
+    private InputValues inputValues = new InputValues();
 
     public boolean loopFlag = true;
 
     // TODO remove
-   // int counter = 1;
+    // int counter = 1;
     //ArrayList<Apartment> apartementArray = new ArrayList<Apartment>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_swipe);
+
+
+        handleActionBar();
 
         Intent iin = getIntent();
         Bundle b = iin.getExtras();
@@ -56,12 +60,11 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 //        buildCards(CachedResponse.getInstance().getApartment(0,0));
 
 
-
 //            apartementArray.add(new Apartment(0, 1450, 40, "Schoene Wohnung in Schwamendingen", "Sehr ruhige Lage", null, "Roswiesenstrasse 120",0));
 //            apartementArray.add(new Apartment(1, 1230, 10, "Traumhafte Wohnung", "Toller Garten!", null, "Sumpfgasse 4",0));
 //            apartementArray.add(new Apartment(2, 900, 45, "Wo isch de ben ond Igor Wonig", "not needed", null, "Nirgendwo 42",0));
 //            apartementArray.add(new Apartment(3, 4000, 5, "Schloss in der Bahnhofsstrasse", "", null, "Bahnhofsstrasse 10",0));
-        if(CachedResponse.getInstance().getApartment(0,0)!=null) {
+        if (CachedResponse.getInstance().getApartment(0, 0) != null) {
             buildCards(CachedResponse.getInstance().getApartment(0, 0));
         } else {
             Toast.makeText(getActivity(), "No results found", Toast.LENGTH_LONG).show();
@@ -73,6 +76,27 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         return this;
     }
 
+    private void handleActionBar(){
+        final ActionBar actionBar = getActionBar();
+        actionBar.setCustomView(R.layout.myfavouriteactionbar);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        final ImageView imageView = (ImageView)findViewById(R.id.actionbarstar);
+
+
+        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(v==(View)imageView){
+                    Toast.makeText(getApplicationContext(), "Bookmarked", Toast.LENGTH_SHORT).show ();
+                }
+
+                return true;
+            }
+        };
+
+        imageView.setOnTouchListener(onTouchListener);
+    }
 
     //Case 1 = another, case 2 = cheaper, case 3 = closer
     private void sendSwipeRequest(int case_t) {
@@ -91,7 +115,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 break;
         }
         Log.i(TAG, "Send swipe request " + str);
-        new RequestTask(false,null).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
+        new RequestTask(false, null).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
     }
 
     @Override
@@ -105,24 +129,24 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 
         Log.i("CARDID: ", card.getId());
 
-        if(card.getId().equals("cardid_picture")){
-            if(CachedResponse.getInstance().getApartment(1,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
+        if (card.getId().equals("cardid_picture")) {
+            if (CachedResponse.getInstance().getApartment(1, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
                 buildCards(CachedResponse.getInstance().getApartment(1, 0));
                 sendSwipeRequest(1);
             } else {
                 Toast.makeText(getActivity(), "No alternative items found", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
-        } else if(card.getId().equals("cardid_price")){
-            if(CachedResponse.getInstance().getApartment(2,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
+        } else if (card.getId().equals("cardid_price")) {
+            if (CachedResponse.getInstance().getApartment(2, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
                 buildCards(CachedResponse.getInstance().getApartment(2, 0));
                 sendSwipeRequest(2);
             } else {
                 Toast.makeText(getActivity(), "No cheaper items found", Toast.LENGTH_LONG).show();
                 buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
-        } else if(card.getId().equals("cardid_time")){
-            if(CachedResponse.getInstance().getApartment(3,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
+        } else if (card.getId().equals("cardid_time")) {
+            if (CachedResponse.getInstance().getApartment(3, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
                 buildCards(CachedResponse.getInstance().getApartment(3, 0));
                 sendSwipeRequest(3);
             } else {
@@ -160,10 +184,10 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         actions.add(t2);
 
         MaterialLargeImageCard largecardPicture = null;
-        if(apartment.getImage() != null && apartment.getImage()!="") {
+        if (apartment.getImage() != null && apartment.getImage() != "") {
             largecardPicture = MaterialLargeImageCard.with(getActivity())
                     .setTitle(apartment.getTitle())
-                    .setSubTitle(apartment.getAddress()+" - Z: " + apartment.getRooms())
+                    .setSubTitle(apartment.getAddress() + " - Z: " + apartment.getRooms())
                     .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
                         @Override
                         public void setupInnerViewElements(ViewGroup parent, View viewImage) {
@@ -185,7 +209,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                     .build();
         }
         largecardPicture.setId("cardid_picture");
-        if(CachedResponse.getInstance().getApartment(1,0) != null && CachedResponse.getInstance().getApartment(1,0).getId()!= -1) {
+        if (CachedResponse.getInstance().getApartment(1, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
             largecardPicture.setSwipeable(true);
         }
         CardViewNative cardViewPicture = (CardViewNative) findViewById(R.id.card_picture);
@@ -201,7 +225,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         thumbPrice.setDrawableResource(R.drawable.ic_keyboard_arrow_down_black_48dp);
         smallCardPrice.addCardThumbnail(thumbPrice);
         smallCardPrice.setId("cardid_price");
-        if(CachedResponse.getInstance().getApartment(2,0) != null && CachedResponse.getInstance().getApartment(2,0).getId()!= -1) {
+        if (CachedResponse.getInstance().getApartment(2, 0) != null && CachedResponse.getInstance().getApartment(2, 0).getId() != -1) {
             smallCardPrice.setSwipeable(true);
         }
         CardView cardViewPrice = (CardView) findViewById(R.id.card_price);
@@ -216,7 +240,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         thumbTime.setDrawableResource(R.drawable.ic_fast_forward_black_48dp);
         smallCardTime.addCardThumbnail(thumbTime);
         smallCardTime.setId("cardid_time");
-        if(CachedResponse.getInstance().getApartment(3,0) != null && CachedResponse.getInstance().getApartment(3,0).getId()!= -1) {
+        if (CachedResponse.getInstance().getApartment(3, 0) != null && CachedResponse.getInstance().getApartment(3, 0).getId() != -1) {
             smallCardTime.setSwipeable(true);
         }
         CardView cardViewTime = (CardView) findViewById(R.id.card_time);
@@ -224,6 +248,8 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         //You can set a SwipeListener.
         smallCardTime.setOnSwipeListener(this);
     }
+
+
 
 //    @Override
 //    public boolean onTouchEvent(MotionEvent event)
