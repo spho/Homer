@@ -296,5 +296,10 @@ public class MainActivity extends Activity {
         new RequestTask(true, this).execute(st);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        System.exit(0);
+    }
 }
