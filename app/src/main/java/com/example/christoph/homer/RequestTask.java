@@ -83,7 +83,7 @@ class RequestTask extends AsyncTask<String, String, String>{
     @Override
     protected void onPostExecute(String result) {
       //  super.onPostExecute(result);
-        Log.i(TAG, "Replay arrived");
+        Log.i(TAG, "Answer arrived");
         Log.i(TAG, result);
         AnswerParser ap = new AnswerParser();
         CachedResponse.getInstance().setApartments(ap.parse(result));

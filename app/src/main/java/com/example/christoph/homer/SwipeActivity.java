@@ -26,7 +26,7 @@ import it.gmariotti.cardslib.library.view.CardViewNative;
 
 public class SwipeActivity extends Activity implements Card.OnSwipeListener {
 
-    private static final String TAG = "SwipeActivity: ";
+    private static final String TAG = "SwipeActivity";
     private float swipe1, swipe2;
     static final int MIN_DISTANCE = 300;
     private final String URL = "http://homer-data.azurewebsites.net/";
@@ -96,30 +96,37 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     @Override
     public void onSwipe(Card card) {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.cards_linear);
-
-        linearLayout.removeAllViews();
-
-//        counter++;
+        //        counter++;
 //        if (counter == 4) {
 //            counter = 0;
 //        }
+        linearLayout.removeAllViews();
 
         Log.i("CARDID: ", card.getId());
 
         if(card.getId().equals("cardid_picture")){
-            if(CachedResponse.getInstance().getApartment(1,0) != null) {
+            if(CachedResponse.getInstance().getApartment(1,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
                 buildCards(CachedResponse.getInstance().getApartment(1, 0));
                 sendSwipeRequest(1);
+            } else {
+                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_SHORT).show();
+                buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
-        }else if(card.getId().equals("cardid_price")){
-            if(CachedResponse.getInstance().getApartment(2,0) != null) {
+        } else if(card.getId().equals("cardid_price")){
+            if(CachedResponse.getInstance().getApartment(2,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
                 buildCards(CachedResponse.getInstance().getApartment(2, 0));
                 sendSwipeRequest(2);
+            } else {
+                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_SHORT).show();
+                buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
-        }else if(card.getId().equals("cardid_time")){
-            if(CachedResponse.getInstance().getApartment(3,0) != null) {
+        } else if(card.getId().equals("cardid_time")){
+            if(CachedResponse.getInstance().getApartment(3,0) != null && CachedResponse.getInstance().getApartment(1,0).getId() != -1) {
                 buildCards(CachedResponse.getInstance().getApartment(2, 0));
                 sendSwipeRequest(3);
+            } else {
+                Toast.makeText(getActivity(), "No more items available", Toast.LENGTH_SHORT).show();
+                buildCards(CachedResponse.getInstance().getApartment(0, 0));
             }
         }
 
@@ -167,26 +174,31 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 break;
         }
 */
-
-        MaterialLargeImageCard largecardPicture =
-                MaterialLargeImageCard.with(getActivity())
-                        //       .setTextOverImage("Flat 1")
-                        .setTitle(apartment.getTitle())
-                        .setSubTitle(apartment.getAddress())
-                                // TODO replace this
-                        .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
-                            @Override
-                            public void setupInnerViewElements(ViewGroup parent, View viewImage) {
-
-                                Picasso.with(getActivity()).setIndicatorsEnabled(true);  //only for debug tests
-                                Picasso.with(getActivity())
-                                        .load(apartment.getImage())
-                                        .error(R.drawable.ic_error_black_48dp)
-                                        .into((ImageView) viewImage);
-                            }
-                        })
-                                //      .setupSupplementalActions(R.layout.picture_card, actions)
-                        .build();
+        MaterialLargeImageCard largecardPicture = null;
+        if(apartment.getImage()!="") {
+            largecardPicture = MaterialLargeImageCard.with(getActivity())
+                    .setTitle(apartment.getTitle())
+                    .setSubTitle(apartment.getAddress())
+                    .useDrawableExternal(new MaterialLargeImageCard.DrawableExternal() {
+                        @Override
+                        public void setupInnerViewElements(ViewGroup parent, View viewImage) {
+                            //Picasso.with(getActivity()).setIndicatorsEnabled(true);  //only for debug tests
+                            Picasso.with(getActivity())
+                                    .load(apartment.getImage())
+                                    .error(R.drawable.ic_error_black_48dp)
+                                    .into((ImageView) viewImage);
+                        }
+                    })
+                            //      .setupSupplementalActions(R.layout.picture_card, actions)
+                    .build();
+        } else {
+            largecardPicture = MaterialLargeImageCard.with(getActivity())
+                    .setTitle(apartment.getTitle())
+                    .setSubTitle(apartment.getAddress())
+                    .useDrawableId(R.drawable.fail)
+                            //      .setupSupplementalActions(R.layout.picture_card, actions)
+                    .build();
+        }
         largecardPicture.setId("cardid_picture");
         largecardPicture.setSwipeable(true);
         CardViewNative cardViewPicture = (CardViewNative) findViewById(R.id.card_picture);

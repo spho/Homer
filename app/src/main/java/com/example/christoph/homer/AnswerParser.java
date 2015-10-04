@@ -79,16 +79,51 @@ public class AnswerParser {
         return apartments;
     }
     private Apartment parseApartment(JSONObject jsonObject) throws JSONException {
-        int id = jsonObject.getInt("id");
+        int id; int price; int traveltime; String title; String img; String address; Float rooms;
+        try {
+            id = jsonObject.getInt("id");
+        } catch (JSONException e) {
+            id = -1;
+        }
         if(id == -1) {
             return null;
         }
-        int price = jsonObject.getInt("price");
-        int traveltime = jsonObject.getInt("traveltime");
-        String img = jsonObject.getString("img");
-        String address = jsonObject.getString("address");
-        String title = jsonObject.getString("title");
-        Float rooms = (float) jsonObject.getDouble("rooms");
+        try {
+            price = jsonObject.getInt("price");
+        } catch (JSONException e) {
+            price = -1;
+        }
+        try {
+            traveltime = jsonObject.getInt("traveltime");
+        } catch (JSONException e) {
+            traveltime = -1;
+        }
+        try {
+            img = jsonObject.getString("img");
+        } catch (JSONException e) {
+            img = "";
+        }
+        try {
+            address = jsonObject.getString("address");
+            if(address.equals("")) {
+                address = "no address given";
+            }
+        } catch (JSONException e) {
+            address = "no address given";
+        }
+        try {
+            title = jsonObject.getString("title");
+            if(title.equals("")) {
+                title.equals("");
+            }
+        } catch (JSONException e) {
+            title = "no title available";
+        }
+        try {
+            rooms = (float) jsonObject.getDouble("rooms");
+        } catch (JSONException e) {
+            rooms = -1.0f;
+        }
         return new Apartment(id, price, traveltime, title, "", img, address, rooms, 0);
     }
     public String parseSessionId(String answer) {
