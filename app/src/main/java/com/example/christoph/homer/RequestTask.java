@@ -2,6 +2,8 @@ package com.example.christoph.homer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -35,11 +37,11 @@ new RequestTask().execute("http://stackoverflow.com");
 class RequestTask extends AsyncTask<String, String, String>{
 
     private static final String TAG = "RequestTask";
-    private MainActivity mainActivity;
+    private Activity backHandle;
     private boolean isInInitialisation;
 
-    public RequestTask(boolean isInInitialisation,MainActivity mainActivity){
-        this.mainActivity = mainActivity;
+    public RequestTask(boolean isInInitialisation,Activity backHandle){
+        this.backHandle = backHandle;
         this.isInInitialisation = isInInitialisation;
     }
 
@@ -86,7 +88,7 @@ class RequestTask extends AsyncTask<String, String, String>{
         Log.i(TAG, "Answer arrived");
         Log.i(TAG, result);
         AnswerParser ap = new AnswerParser();
-        Apartment[][] apartments = ap.parse(result);
+        Apartment[] apartments = ap.parse(result);
         if(apartments!=null) {
             CachedResponse.getInstance().setApartments(apartments);
         }
@@ -96,7 +98,9 @@ class RequestTask extends AsyncTask<String, String, String>{
         }
 
         if(isInInitialisation){
-            mainActivity.exitFormAndGoToSwiping();
+            ((MainActivity)backHandle).exitFormAndGoToSwiping();
+        } else {
+            ((SwipeActivity)backHandle).apartmentArrival();
         }
 
     }

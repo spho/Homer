@@ -57,8 +57,8 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         if (b != null) {
             inputValues.desirialise((String) b.get("InputValues"));
         }
-       if (CachedResponse.getInstance().getApartment(0, 0) != null) {
-            buildCards(CachedResponse.getInstance().getApartment(0, 0));
+       if (CachedResponse.getInstance().getApartment(0) != null) {
+            buildCards(CachedResponse.getInstance().getApartment(0));
         } else {
             Toast.makeText(getActivity(), "No results found", Toast.LENGTH_LONG).show();
         }
@@ -108,44 +108,41 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                 break;
         }
         Log.i(TAG, "Send swipe request " + str);
-        new RequestTask(false, null).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
+        new RequestTask(false, this).execute(URL + str + "?sessionid=" + CachedResponse.getInstance().getSessionid());
     }
 
     @Override
     public void onSwipe(Card card) {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.cards_linear);
         starView.setImageResource(R.drawable.star);
-        //        counter++;
-//        if (counter == 4) {
-//            counter = 0;
-//        }
+
         linearLayout.removeAllViews();
 
         Log.i("CARDID: ", card.getId());
 
         if (card.getId().equals("cardid_picture")) {
-            if (CachedResponse.getInstance().getApartment(1, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
-                buildCards(CachedResponse.getInstance().getApartment(1, 0));
+            if (CachedResponse.getInstance().getApartment(1) != null && CachedResponse.getInstance().getApartment(1).getId() != -1) {
+                buildCards(CachedResponse.getInstance().getApartment(1));
                 sendSwipeRequest(1);
             } else {
                 Toast.makeText(getActivity(), "No alternative items found", Toast.LENGTH_LONG).show();
-                buildCards(CachedResponse.getInstance().getApartment(0, 0));
+                buildCards(CachedResponse.getInstance().getApartment(0));
             }
         } else if (card.getId().equals("cardid_price")) {
-            if (CachedResponse.getInstance().getApartment(2, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
-                buildCards(CachedResponse.getInstance().getApartment(2, 0));
+            if (CachedResponse.getInstance().getApartment(2) != null && CachedResponse.getInstance().getApartment(2).getId() != -1) {
+                buildCards(CachedResponse.getInstance().getApartment(2));
                 sendSwipeRequest(2);
             } else {
                 Toast.makeText(getActivity(), "No cheaper items found", Toast.LENGTH_LONG).show();
-                buildCards(CachedResponse.getInstance().getApartment(0, 0));
+                buildCards(CachedResponse.getInstance().getApartment(0));
             }
         } else if (card.getId().equals("cardid_time")) {
-            if (CachedResponse.getInstance().getApartment(3, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
-                buildCards(CachedResponse.getInstance().getApartment(3, 0));
+            if (CachedResponse.getInstance().getApartment(3) != null && CachedResponse.getInstance().getApartment(3).getId() != -1) {
+                buildCards(CachedResponse.getInstance().getApartment(3));
                 sendSwipeRequest(3);
             } else {
                 Toast.makeText(getActivity(), "No quicker items found", Toast.LENGTH_LONG).show();
-                buildCards(CachedResponse.getInstance().getApartment(0, 0));
+                buildCards(CachedResponse.getInstance().getApartment(0));
             }
         }
 
@@ -203,7 +200,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
                     .build();
         }
         largecardPicture.setId("cardid_picture");
-        if (CachedResponse.getInstance().getApartment(1, 0) != null && CachedResponse.getInstance().getApartment(1, 0).getId() != -1) {
+        if (CachedResponse.getInstance().getApartment(1) != null && CachedResponse.getInstance().getApartment(1).getId() != -1) {
             largecardPicture.setSwipeable(true);
         }
         CardViewNative cardViewPicture = (CardViewNative) findViewById(R.id.card_picture);
@@ -219,7 +216,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         thumbPrice.setDrawableResource(R.drawable.ic_keyboard_arrow_down_black_48dp);
         smallCardPrice.addCardThumbnail(thumbPrice);
         smallCardPrice.setId("cardid_price");
-        if (CachedResponse.getInstance().getApartment(2, 0) != null && CachedResponse.getInstance().getApartment(2, 0).getId() != -1) {
+        if (CachedResponse.getInstance().getApartment(2) != null && CachedResponse.getInstance().getApartment(2).getId() != -1) {
             smallCardPrice.setSwipeable(true);
         }
         CardView cardViewPrice = (CardView) findViewById(R.id.card_price);
@@ -234,7 +231,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         thumbTime.setDrawableResource(R.drawable.ic_fast_forward_black_48dp);
         smallCardTime.addCardThumbnail(thumbTime);
         smallCardTime.setId("cardid_time");
-        if (CachedResponse.getInstance().getApartment(3, 0) != null && CachedResponse.getInstance().getApartment(3, 0).getId() != -1) {
+        if (CachedResponse.getInstance().getApartment(3) != null && CachedResponse.getInstance().getApartment(3).getId() != -1) {
             smallCardTime.setSwipeable(true);
         }
         CardView cardViewTime = (CardView) findViewById(R.id.card_time);
@@ -260,4 +257,17 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         return true;
     }
 
+    public void apartmentArrival() {
+        Log.i(TAG, "New Apartments arrived, rebuilding cards");
+        if (!(CachedResponse.getInstance().getApartment(1) != null && CachedResponse.getInstance().getApartment(1).getId() != -1)) {
+            Toast.makeText(getActivity(), "No alternative items found", Toast.LENGTH_LONG).show();
+        }
+        if (!(CachedResponse.getInstance().getApartment(2) != null && CachedResponse.getInstance().getApartment(2).getId() != -1)) {
+            Toast.makeText(getActivity(), "No cheaper items found", Toast.LENGTH_LONG).show();
+        }
+        if (!(CachedResponse.getInstance().getApartment(3) != null && CachedResponse.getInstance().getApartment(3).getId() != -1)) {
+            Toast.makeText(getActivity(), "No quicker items found", Toast.LENGTH_LONG).show();
+        }
+        buildCards(CachedResponse.getInstance().getApartment(0));
+    }
 }

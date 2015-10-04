@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
  * Created by marcel on 10/3/15.
  */
 public class AnswerParser {
-    public Apartment[][] parse(String answer) {
+    public Apartment[] parse(String answer) {
         JSONObject jsonObject = convertStringToJSON(answer);
         return parseJSON(jsonObject);
     }
@@ -25,43 +25,47 @@ public class AnswerParser {
         }
         return null;
     }
-    private Apartment[][] parseJSON(JSONObject jsonObject) {
+    private Apartment[] parseJSON(JSONObject jsonObject) {
         if(jsonObject!=null) {
-            Apartment[][] apartments = new Apartment[4][4];
+            Apartment[] apartments = new Apartment[4];
             try {
+                apartments[0] = parseApartment(jsonObject.getJSONObject("current"));
+                apartments[1] = parseApartment(jsonObject.getJSONObject("another"));
+                apartments[2] = parseApartment(jsonObject.getJSONObject("cheaper"));
+                apartments[3] = parseApartment(jsonObject.getJSONObject("closer"));
+//
+//                for (int i = 0; i < 4; i++) {
+//                    JSONObject root = null;
+//                    switch (i) {
+//                        case 0:
+//                            root = jsonObject.getJSONObject("current");
+//                            apartments[i] = parseApartment(root);
+//                            break;
+//                        case 1:
+//                            root = jsonObject.getJSONObject("another");
+//                            break;
+//                        case 2:
+//                            root = jsonObject.getJSONObject("cheaper");
+//                            break;
+//                        case 3:
+//                            root = jsonObject.getJSONObject("closer");
+//                            break;
+//                    }
+//                    if (root == null) {
+//                        throw new JSONException("Fail");
+//                    }
 
-                for (int i = 0; i < 4; i++) {
-                    JSONObject root = null;
-                    switch (i) {
-                        case 0:
-                            root = jsonObject.getJSONObject("current");
-                            apartments[i][0] = parseApartment(root);
-                            break;
-                        case 1:
-                            root = jsonObject.getJSONObject("another");
-                            break;
-                        case 2:
-                            root = jsonObject.getJSONObject("cheaper");
-                            break;
-                        case 3:
-                            root = jsonObject.getJSONObject("closer");
-                            break;
-                    }
-                    if (root == null) {
-                        throw new JSONException("Fail");
-                    }
-
-                    if (i != 0) {
-                        apartments[i][0] = parseApartment(root.getJSONObject("current"));
-                        JSONObject another = root.getJSONObject("another");
-                        apartments[i][1] = parseApartment(another);
-                        JSONObject cheaper = root.getJSONObject("cheaper");
-                        apartments[i][2] = parseApartment(cheaper);
-                        JSONObject closer = root.getJSONObject("closer");
-                        apartments[i][3] = parseApartment(closer);
-                    }
-
-                }
+//                    if (i != 0) {
+//                        apartments[i][0] = parseApartment(root.getJSONObject("current"));
+//                        JSONObject another = root.getJSONObject("another");
+//                        apartments[i][1] = parseApartment(another);
+//                        JSONObject cheaper = root.getJSONObject("cheaper");
+//                        apartments[i][2] = parseApartment(cheaper);
+//                        JSONObject closer = root.getJSONObject("closer");
+//                        apartments[i][3] = parseApartment(closer);
+//                    }
+//
+//                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
