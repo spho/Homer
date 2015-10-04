@@ -33,6 +33,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     static final int MIN_DISTANCE = 300;
     private final String URL = "http://homer-data.azurewebsites.net/";
     private InputValues inputValues = new InputValues();
+    final ImageView imageView = (ImageView)findViewById(R.id.actionbarstar);
 
     public boolean loopFlag = true;
 
@@ -81,7 +82,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
         actionBar.setCustomView(R.layout.myfavouriteactionbar);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
-        final ImageView imageView = (ImageView)findViewById(R.id.actionbarstar);
+
 
 
         View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -89,6 +90,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
             public boolean onTouch(View v, MotionEvent event) {
                 if(v==(View)imageView){
                     Toast.makeText(getApplicationContext(), "Bookmarked", Toast.LENGTH_SHORT).show ();
+                    imageView.setImageResource(R.drawable.star2);
                 }
 
                 return true;
@@ -121,6 +123,7 @@ public class SwipeActivity extends Activity implements Card.OnSwipeListener {
     @Override
     public void onSwipe(Card card) {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.cards_linear);
+        imageView.setImageResource(R.drawable.star);
         //        counter++;
 //        if (counter == 4) {
 //            counter = 0;
