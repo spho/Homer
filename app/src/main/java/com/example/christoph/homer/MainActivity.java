@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
                     if (v == (View) goButton) {
 
                         if (location != null) {
-                            if (location.getPostalCode() != null && location.getCity() != null && location.getAddress() != null) {
+                            if (location.getPostalCode() != null && location.getCity() != null && location.getAddress() != null&&!location.getAddress().equals(location.getCity())) {
                                 sendInitToServer();
                             } else {
                                 Toast.makeText(getApplicationContext(), "Invalid Location selected", Toast.LENGTH_SHORT).show();
