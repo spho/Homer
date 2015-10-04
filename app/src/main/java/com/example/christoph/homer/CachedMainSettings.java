@@ -6,7 +6,7 @@ package com.example.christoph.homer;
 public class CachedMainSettings {
     private static CachedMainSettings instance = null;
 
-    private int savedDollarSelector;
+    private int savedDollarSelector=2;
     public int getSavedDollarSelector() {
         return savedDollarSelector;
     }
